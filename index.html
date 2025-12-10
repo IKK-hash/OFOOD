@@ -103,6 +103,36 @@ header{background:#fff}
 <div class="wa-float" onclick="window.open('https://wa.me/62895343287264')">
   <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">
 </div>
+<!-- FIREBASE SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+    apiKey: "AIzaSyBKMRuTSssM4G3ui7OKamS79hHsPykDRP0",
+    authDomain: "food-bb82e.firebaseapp.com",
+    databaseURL: "https://food-bb82e-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "food-bb82e",
+    storageBucket: "food-bb82e.firebasestorage.app",
+    messagingSenderId: "95052698382",
+    appId: "1:95052698382:web:2d7c6f020f27133c527d5f"
+  };
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+let allMenus = [];
+const defaultMenus=[
+ {nama:'Martabak Mini',harga:3000,gambar:'https://vui.unsplash.com/resize?height=256&quality=60&type=auto&url=https%3A%2F%2Fsearched-images.s3.us-west-2.amazonaws.com%2Fa06980b7-3625-4f35-b896-a8e009a3e3f4%3FX-Amz-Algorithm%3DAWS4-HMAC-SHA256%26X-Amz-Credential%3DAKIAQ4GRIA4QQ7L7GEOH%252F20251210%252Fus-west-2%252Fs3%252Faws4_request%26X-Amz-Date%3D20251210T045112Z%26X-Amz-Expires%3D86400%26X-Amz-SignedHeaders%3Dhost%26X-Amz-Signature%3D7f2d989678e37962d56250d8ffeedfdedc57f79635f1d3df6637f0f036f7f95f&sign=GOxBIQBovr330eyp4JnrVx3MJn4M3gbPUapy_JnFyI8'},
+ {nama:'Pisang Coklat',harga:3000,gambar:'https://vui.unsplash.com/resize?height=256&quality=60&type=auto&url=https%3A%2F%2Fsearched-images.s3.us-west-2.amazonaws.com%2F603decc8-9234-47f0-ad8f-0041ba2552e8%3FX-Amz-Algorithm%3DAWS4-HMAC-SHA256%26X-Amz-Credential%3DAKIAQ4GRIA4QQ7L7GEOH%252F20251210%252Fus-west-2%252Fs3%252Faws4_request%26X-Amz-Date%3D20251210T045225Z%26X-Amz-Expires%3D86400%26X-Amz-SignedHeaders%3Dhost%26X-Amz-Signature%3Dae95496a412e8d98785ac4ebb88540141e85d6465d202677c6bc9a3fbf328065&sign=EL5BgLc3U5XzBBzefAUDCGlvd-UGLs8gafY9H-0eiIo'}
+];
+
+db.ref("menus").on("value", snapshot => {
+  const data = snapshot.val() || {};
+  allMenus = [...defaultMenus, ...Object.values(data)];
+  renderMenu();
+});
+
+</script>
 
 <script>
 const loginSection=document.getElementById('loginSection');
@@ -144,45 +174,42 @@ function logout(){
   showLogin();
 }
 
-const defaultMenus=[
- {nama:'Martabak Mini',harga:3000,gambar:'https://vui.unsplash.com/resize?height=256&quality=60&type=auto&url=https%3A%2F%2Fsearched-images.s3.us-west-2.amazonaws.com%2Fa06980b7-3625-4f35-b896-a8e009a3e3f4%3FX-Amz-Algorithm%3DAWS4-HMAC-SHA256%26X-Amz-Credential%3DAKIAQ4GRIA4QQ7L7GEOH%252F20251210%252Fus-west-2%252Fs3%252Faws4_request%26X-Amz-Date%3D20251210T045112Z%26X-Amz-Expires%3D86400%26X-Amz-SignedHeaders%3Dhost%26X-Amz-Signature%3D7f2d989678e37962d56250d8ffeedfdedc57f79635f1d3df6637f0f036f7f95f&sign=GOxBIQBovr330eyp4JnrVx3MJn4M3gbPUapy_JnFyI8'},
- {nama:'Pisang Coklat',harga:3000,gambar:'https://vui.unsplash.com/resize?height=256&quality=60&type=auto&url=https%3A%2F%2Fsearched-images.s3.us-west-2.amazonaws.com%2F603decc8-9234-47f0-ad8f-0041ba2552e8%3FX-Amz-Algorithm%3DAWS4-HMAC-SHA256%26X-Amz-Credential%3DAKIAQ4GRIA4QQ7L7GEOH%252F20251210%252Fus-west-2%252Fs3%252Faws4_request%26X-Amz-Date%3D20251210T045225Z%26X-Amz-Expires%3D86400%26X-Amz-SignedHeaders%3Dhost%26X-Amz-Signature%3Dae95496a412e8d98785ac4ebb88540141e85d6465d202677c6bc9a3fbf328065&sign=EL5BgLc3U5XzBBzefAUDCGlvd-UGLs8gafY9H-0eiIo'}
-];
+
 
 function getExtra(){return JSON.parse(localStorage.getItem('extraMenus')||'[]')}
 
 function renderMenu(){
   menuContainer.innerHTML='';
-
   const keyword = document.getElementById('searchInput').value.toLowerCase();
-  const menus = [...defaultMenus, ...getExtra()];
 
-  menus
-  .filter(m => m.nama.toLowerCase().includes(keyword))
-  .forEach((m,i)=>{
-    const d=document.createElement('div');
-    d.className='menu-item';
-    d.innerHTML=`
-      <img src="${m.gambar}">
-      <h5>${m.nama}</h5>
-      <p>Rp${m.harga.toLocaleString('id-ID')}</p>
-      <button class="btn-beli" onclick="order('${m.nama}',${m.harga})">ORDER</button>
-      ${i>=defaultMenus.length?`<button class="btn btn-danger mt-2" onclick="hapus(${i-defaultMenus.length})">HAPUS</button>`:''}
-    `;
-    menuContainer.appendChild(d);
-  });
+  allMenus
+    .filter(m => m.nama.toLowerCase().includes(keyword))
+    .forEach(m=>{
+      const d=document.createElement('div');
+      d.className='menu-item';
+      d.innerHTML=`
+        <img src="${m.gambar}">
+        <h5>${m.nama}</h5>
+        <p>Rp${m.harga.toLocaleString('id-ID')}</p>
+        <button class="btn-beli" onclick="order('${m.nama}',${m.harga})">ORDER</button>
+      `;
+      menuContainer.appendChild(d);
+    });
 }
 
-
 function saveMenu(){
-  const e=getExtra();
-  e.push({
-    nama:newMenuName.value,
-    harga:Number(newMenuPrice.value),
-    gambar:newMenuImage.value||'https://via.placeholder.com/400'
+  db.ref("menus").push({
+    nama: newMenuName.value,
+    harga: Number(newMenuPrice.value),
+    gambar: newMenuImage.value || 'https://via.placeholder.com/400'
   });
-  localStorage.setItem('extraMenus',JSON.stringify(e));
-  alert('Menu disimpan');
+
+  // ✅ kosongkan input SETELAH simpan
+  newMenuName.value = '';
+  newMenuPrice.value = '';
+  newMenuImage.value = '';
+
+  alert("Menu disimpan (GLOBAL)");
   goMenu();
 }
 
@@ -199,6 +226,8 @@ function order(n,h){
 
 if(localStorage.getItem('login')) goBeranda(); else showLogin();
 </script>
+
+
 
 </body>
 </html>
