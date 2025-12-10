@@ -128,10 +128,14 @@ const defaultMenus=[
 
 db.ref("menus").on("value", snapshot => {
   const data = snapshot.val() || {};
-  allMenus = [...defaultMenus, ...Object.values(data)];
+  const firebaseMenus = Object.keys(data).map(key => ({
+    id: key,
+    ...data[key]
+  }));
+
+  allMenus = [...defaultMenus, ...firebaseMenus];
   renderMenu();
 });
-
 </script>
 
 <script>
@@ -192,10 +196,17 @@ function renderMenu(){
         <h5>${m.nama}</h5>
         <p>Rp${m.harga.toLocaleString('id-ID')}</p>
         <button class="btn-beli" onclick="order('${m.nama}',${m.harga})">ORDER</button>
+        ${m.id ? `<button class="btn btn-danger mt-2 w-100" onclick="hapusMenu('${m.id}')">HAPUS</button>` : ''}
       `;
       menuContainer.appendChild(d);
     });
 }
+
+function hapusMenu(id){
+  if(!confirm("Hapus menu ini?")) return;
+  db.ref("menus/"+id).remove();
+}
+
 
 function saveMenu(){
   db.ref("menus").push({
