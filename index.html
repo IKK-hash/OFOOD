@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>TOMZ FOOD & DRINK</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -26,11 +26,12 @@ header{background:#fff}
 .menu-item img{width:100%;height:160px;object-fit:cover;border-radius:10px}
 .btn-beli{background:var(--wa);color:#fff;border:none;padding:10px;width:100%;border-radius:8px;font-weight:bold}
 
-.wa-float{position:fixed;right:18px;bottom:18px;width:56px;height:56px;border-radius:50%;background:var(--wa);display:flex;align-items:center;justify-content:center}
+.wa-float{position:fixed;right:18px;bottom:18px;width:56px;height:56px;border-radius:50%;background:var(--wa);display:flex;align-items:center;justify-content:center;cursor:pointer}
 .wa-float img{width:34px}
+
+.small-muted{font-size:13px;color:#666}
 </style>
 </head>
-
 <body>
 
 <!-- LOGIN -->
@@ -63,16 +64,16 @@ header{background:#fff}
 
 <!-- BERANDA -->
 <section id="berandaSection" class="hidden">
-<header class="p-3 bg-dark text-white d-flex justify-content-between">
-  <span>TOMZ FOOD</span>
-  <button class="btn btn-warning" onclick="logout()">Logout</button>
-</header>
+  <header class="p-3 bg-dark text-white d-flex justify-content-between">
+    <span>TOMZ FOOD</span>
+    <button class="btn btn-warning" onclick="logout()">Logout</button>
+  </header>
 
-<div class="hero">
-  <h1>Selamat Datang</h1>
-  <p>Makanan enak setiap hari</p>
-  <button class="btn" onclick="goMenu()">Lihat Menu</button>
-</div>
+  <div class="hero">
+    <h1>Selamat Datang</h1>
+    <p>Makanan enak setiap hari</p>
+    <button class="btn" onclick="goMenu()">Lihat Menu</button>
+  </div>
 </section>
 <!-- Informasi Pengantaran - Beranda -->
 <div style="
@@ -90,116 +91,140 @@ header{background:#fff}
   <div class="delivery-info" style="text-align:center; margin-top:20px; font-size:1.2rem; font-weight:600;">
   Pengantaran: Senin–Jum'at 17:15–20:00 • Sabtu–Minggu 07:00–20:00
 </div>
-  
+
+
 <!-- MENU -->
 <section id="menuSection" class="hidden">
-<div class="menu-section">
-  <h2>Menu</h2>
-  <input id="searchInput" class="form-control mb-3" placeholder="Cari menu..." oninput="renderMenu()">
-<div id="menuContainer" class="menu-container"></div>
-  <button class="btn btn-primary mt-3" onclick="goAddMenu()">Tambah Menu</button>
-  <button class="btn btn-secondary mt-2" onclick="goBeranda()">Kembali</button>
-<button class="btn btn-warning mt-2" onclick="goCart()">🛒 Lihat Keranjang</button>
-</div>
+  <div class="menu-section">
+    <h2>Menu</h2>
+    <input id="searchInput" class="form-control mb-3" placeholder="Cari menu..." oninput="renderMenu()">
+
+    <div id="menuContainer" class="menu-container"></div>
+
+    <div class="mt-3 d-flex gap-2 justify-content-center">
+      <button class="btn btn-primary" onclick="goAddMenu()">Tambah Menu</button>
+      <button class="btn btn-secondary" onclick="goBeranda()">Kembali</button>
+      <button class="btn btn-warning" onclick="goCart()">Lihat Keranjang</button>
+    </div>
+  </div>
 </section>
 
 <!-- KERANJANG -->
 <section id="cartSection" class="hidden">
   <div class="menu-section">
     <h2>Keranjang</h2>
-    <div id="cartList"></div>
-    <h4 class="mt-3">Total: <span id="cartTotal">Rp0</span></h4>
+    <div id="cartContainer"></div>
+    <div class="mt-3 d-flex gap-2 justify-content-center">
+      <button class="btn btn-success" onclick="checkout()">Checkout</button>
+      <button class="btn btn-secondary" onclick="goMenu()">Kembali ke Menu</button>
+    </div>
+  </div>
+</section>
 
-    <button class="btn btn-success w-100 mt-3" onclick="checkout()">Checkout (WA)</button>
+<!-- ADD MENU -->
+<section id="addMenuSection" class="hidden">
+  <div class="menu-section">
+    <h2>Tambah Menu</h2>
+    <input id="newMenuName" class="form-control mb-2" placeholder="Nama menu">
+    <input id="newMenuPrice" type="number" class="form-control mb-2" placeholder="Harga">
+    <input id="newMenuImage" class="form-control mb-3" placeholder="URL gambar">
+    <button class="btn btn-success w-100" onclick="saveMenu()">Simpan Menu</button>
     <button class="btn btn-secondary w-100 mt-2" onclick="goMenu()">Kembali</button>
   </div>
 </section>
 
-
-<!-- ADD MENU -->
-<section id="addMenuSection" class="hidden">
-<div class="menu-section">
-  <h2>Tambah Menu</h2>
-  <input id="newMenuName" class="form-control mb-2" placeholder="Nama menu">
-  <input id="newMenuPrice" type="number" class="form-control mb-2" placeholder="Harga">
-  <input id="newMenuImage" class="form-control mb-3" placeholder="URL gambar">
-  <button class="btn btn-success w-100" onclick="saveMenu()">Simpan Menu</button>
-  <button class="btn btn-secondary w-100 mt-2" onclick="goMenu()">Kembali</button>
-</div>
-</section>
-
 <!-- WA FLOAT -->
 <div class="wa-float" onclick="window.open('https://wa.me/62895343287264')">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WA">
 </div>
+
 <!-- FIREBASE SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <script>
+/* =========================
+   Konfigurasi & data awal
+   ========================= */
 const firebaseConfig = {
-    apiKey: "AIzaSyBKMRuTSssM4G3ui7OKamS79hHsPykDRP0",
-    authDomain: "food-bb82e.firebaseapp.com",
-    databaseURL: "https://food-bb82e-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "food-bb82e",
-    storageBucket: "food-bb82e.firebasestorage.app",
-    messagingSenderId: "95052698382",
-    appId: "1:95052698382:web:2d7c6f020f27133c527d5f"
-  };
+  apiKey: "AIzaSyBKMRuTSssM4G3ui7OKamS79hHsPykDRP0",
+  authDomain: "food-bb82e.firebaseapp.com",
+  databaseURL: "https://food-bb82e-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "food-bb82e",
+  storageBucket: "food-bb82e.firebasestorage.app",
+  messagingSenderId: "95052698382",
+  appId: "1:95052698382:web:2d7c6f020f27133c527d5f"
+};
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
+
 let allMenus = [];
-const defaultMenus=[
- {nama:'Martabak Mini',harga:3000,gambar:'https://vui.unsplash.com/resize?height=256&quality=60&type=auto&url=https%3A%2F%2Fsearched-images.s3.us-west-2.amazonaws.com%2Fa06980b7-3625-4f35-b896-a8e009a3e3f4%3FX-Amz-Algorithm%3DAWS4-HMAC-SHA256%26X-Amz-Credential%3DAKIAQ4GRIA4QQ7L7GEOH%252F20251210%252Fus-west-2%252Fs3%252Faws4_request%26X-Amz-Date%3D20251210T045112Z%26X-Amz-Expires%3D86400%26X-Amz-SignedHeaders%3Dhost%26X-Amz-Signature%3D7f2d989678e37962d56250d8ffeedfdedc57f79635f1d3df6637f0f036f7f95f&sign=GOxBIQBovr330eyp4JnrVx3MJn4M3gbPUapy_JnFyI8'},
- {nama:'Pisang Coklat',harga:3000,gambar:'https://vui.unsplash.com/resize?height=256&quality=60&type=auto&url=https%3A%2F%2Fsearched-images.s3.us-west-2.amazonaws.com%2F603decc8-9234-47f0-ad8f-0041ba2552e8%3FX-Amz-Algorithm%3DAWS4-HMAC-SHA256%26X-Amz-Credential%3DAKIAQ4GRIA4QQ7L7GEOH%252F20251210%252Fus-west-2%252Fs3%252Faws4_request%26X-Amz-Date%3D20251210T045225Z%26X-Amz-Expires%3D86400%26X-Amz-SignedHeaders%3Dhost%26X-Amz-Signature%3Dae95496a412e8d98785ac4ebb88540141e85d6465d202677c6bc9a3fbf328065&sign=EL5BgLc3U5XzBBzefAUDCGlvd-UGLs8gafY9H-0eiIo'}
+const defaultMenus = [
+  { nama: 'Martabak Mini', harga: 3000, gambar: 'https://vui.unsplash.com/resize?height=256&quality=60&type=auto&url=https%3A%2F%2Fsearched-images.s3.us-west-2.amazonaws.com%2F97df095d-cddd-4efc-ace5-8d697a565384%3FX-Amz-Algorithm%3DAWS4-HMAC-SHA256%26X-Amz-Credential%3DAKIAQ4GRIA4QQ7L7GEOH%252F20251211%252Fus-west-2%252Fs3%252Faws4_request%26X-Amz-Date%3D20251211T013230Z%26X-Amz-Expires%3D86400%26X-Amz-SignedHeaders%3Dhost%26X-Amz-Signature%3D2aa276dcb80e6df319f31d837bde6443bdbdefc0eb89b77081e681152f296ca3&sign=UROdS0Nii5cWt0hHEqvZ7w4pO9uK8KXUnWjctbsRFpo' },
+  { nama: 'Pisang Coklat', harga: 3000, gambar: 'https://vui.unsplash.com/resize?height=256&quality=60&type=auto&url=https%3A%2F%2Fsearched-images.s3.us-west-2.amazonaws.com%2F2d85c862-263e-4a11-a310-40be4cf8eff2%3FX-Amz-Algorithm%3DAWS4-HMAC-SHA256%26X-Amz-Credential%3DAKIAQ4GRIA4QQ7L7GEOH%252F20251211%252Fus-west-2%252Fs3%252Faws4_request%26X-Amz-Date%3D20251211T013345Z%26X-Amz-Expires%3D86400%26X-Amz-SignedHeaders%3Dhost%26X-Amz-Signature%3D1f82501308f7cb2e177dd48c467e30345b2112f4cc7211d559f7a6557d98d5f7&sign=ua3VXfttWVX7xdtbsZSyFZz2gYvJNQkOuRZP6lN2bx4' }
 ];
 
-db.ref("menus").on("value", snapshot => {
-  const data = snapshot.val() || {};
-  const firebaseMenus = Object.keys(data).map(key => ({
-    id: key,
-    ...data[key]
-  }));
+/* =========================
+   DOM references
+   ========================= */
+const sections = document.querySelectorAll('section');
+const loginSection = document.getElementById('loginSection');
+const registerSection = document.getElementById('registerSection');
+const berandaSection = document.getElementById('berandaSection');
+const menuSection = document.getElementById('menuSection');
+const cartSection = document.getElementById('cartSection');
+const addMenuSection = document.getElementById('addMenuSection');
 
-  allMenus = [...defaultMenus, ...firebaseMenus];
-  renderMenu();
-});
-</script>
+const menuContainer = document.getElementById('menuContainer');
+const cartContainer = document.getElementById('cartContainer');
+const searchInput = document.getElementById('searchInput');
 
-<script>
-const loginSection=document.getElementById('loginSection');
-const registerSection=document.getElementById('registerSection');
-const berandaSection=document.getElementById('berandaSection');
-const menuSection=document.getElementById('menuSection');
-const addMenuSection=document.getElementById('addMenuSection');
-const menuContainer=document.getElementById('menuContainer');
+/* =========================
+   State
+   ========================= */
+let cart = []; // menyimpan {nama, harga}
 
+/* =========================
+   Utility: hideAll yang aman
+   ========================= */
 function hideAll(){
-  [loginSection,registerSection,berandaSection,menuSection,addMenuSection].forEach(s=>s.classList.add('hidden'));
+  // Sembunyikan semua section agar tidak ada bagian yang 'nyangkut'
+  sections.forEach(s => s.classList.add('hidden'));
 }
 
-function showLogin(){hideAll();loginSection.classList.remove('hidden')}
-function showRegister(){hideAll();registerSection.classList.remove('hidden')}
-function goBeranda(){hideAll();berandaSection.classList.remove('hidden')}
-function goMenu(){hideAll();menuSection.classList.remove('hidden');renderMenu()}
-function goAddMenu(){hideAll();addMenuSection.classList.remove('hidden')}
+/* =========================
+   Navigation helpers
+   ========================= */
+function showLogin(){ hideAll(); loginSection.classList.remove('hidden'); }
+function showRegister(){ hideAll(); registerSection.classList.remove('hidden'); }
+function goBeranda(){ hideAll(); berandaSection.classList.remove('hidden'); }
+function goMenu(){ hideAll(); menuSection.classList.remove('hidden'); renderMenu(); }
+function goCart(){ hideAll(); cartSection.classList.remove('hidden'); renderCart(); }
+function goAddMenu(){ hideAll(); addMenuSection.classList.remove('hidden'); }
 
+/* =========================
+   Auth (localStorage simple)
+   ========================= */
 function register(){
-  localStorage.setItem('user',JSON.stringify({
-    u:registerUsername.value,
-    p:registerPassword.value
-  }));
+  const u = document.getElementById('registerUsername').value.trim();
+  const p = document.getElementById('registerPassword').value;
+  if(!u || !p){ alert('Isi nama & password'); return; }
+  localStorage.setItem('user', JSON.stringify({u,p}));
   alert('Akun dibuat');
+  document.getElementById('registerUsername').value = '';
+  document.getElementById('registerPassword').value = '';
   showLogin();
 }
 
 function login(){
-  const u=JSON.parse(localStorage.getItem('user')||'{}');
-  if(loginUsername.value===u.u && loginPassword.value===u.p){
-    localStorage.setItem('login',1);
+  const creds = JSON.parse(localStorage.getItem('user') || '{}');
+  if(document.getElementById('loginUsername').value === creds.u && document.getElementById('loginPassword').value === creds.p){
+    localStorage.setItem('login', '1');
     goBeranda();
-  } else alert('Login gagal');
+  } else {
+    alert('Login gagal');
+  }
 }
 
 function logout(){
@@ -207,140 +232,178 @@ function logout(){
   showLogin();
 }
 
+/* =========================
+   Firebase listener (menus)
+   ========================= */
+db.ref("menus").on("value", snapshot => {
+  const data = snapshot.val() || {};
+  const firebaseMenus = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+  allMenus = [...defaultMenus, ...firebaseMenus];
+  // Jika saat ini sedang di menu, re-render agar perubahan realtime terlihat
+  if(!menuSection.classList.contains('hidden')) renderMenu();
+});
 
-
-function getExtra(){return JSON.parse(localStorage.getItem('extraMenus')||'[]')}
-
+/* =========================
+   Render menu (HANYA menu)
+   ========================= */
 function renderMenu(){
-  menuContainer.innerHTML='';
-  const keyword = document.getElementById('searchInput').value.toLowerCase();
+  menuContainer.innerHTML = '';
+  const keyword = (searchInput.value || '').toLowerCase();
 
-  allMenus
-    .filter(m => m.nama.toLowerCase().includes(keyword))
-    .forEach(m=>{
-      const d=document.createElement('div');
-      d.className='menu-item';
-      d.innerHTML=`
-        <img src="${m.gambar}">
-        <h5>${m.nama}</h5>
-        <p>Rp${m.harga.toLocaleString('id-ID')}</p>
+  const filtered = allMenus.filter(m => (m.nama || '').toLowerCase().includes(keyword));
+  if(filtered.length === 0){
+    menuContainer.innerHTML = '<p class="small-muted">Menu tidak ditemukan</p>';
+    return;
+  }
 
-        <button class="btn-beli"
-          onclick="addToCart('${m.nama}',${m.harga})">
-          + Keranjang
-        </button>
+  filtered.forEach(m => {
+    // Buat elemen menu dengan DOM API (aman untuk nama / karakter special)
+    const wrap = document.createElement('div');
+    wrap.className = 'menu-item';
 
-        ${m.id ? `
-        <button class="btn btn-danger mt-2 w-100"
-          onclick="hapusMenu('${m.id}')">
-          HAPUS
-        </button>` : ''}
-      `;
-      menuContainer.appendChild(d);
+    const img = document.createElement('img');
+    img.src = m.gambar || 'https://via.placeholder.com/400x300?text=No+Image';
+    img.alt = m.nama || 'menu';
+
+    const h5 = document.createElement('h5');
+    h5.textContent = m.nama;
+
+    const p = document.createElement('p');
+    p.textContent = `Rp${Number(m.harga).toLocaleString('id-ID')}`;
+
+    const btnOrder = document.createElement('button');
+    btnOrder.className = 'btn-beli';
+    btnOrder.type = 'button';
+    btnOrder.textContent = 'ORDER';
+    // gunakan closure untuk aman
+    btnOrder.addEventListener('click', () => {
+      order(m.nama, Number(m.harga));
+    });
+
+    wrap.appendChild(img);
+    wrap.appendChild(h5);
+    wrap.appendChild(p);
+    wrap.appendChild(btnOrder);
+
+    // Jika menu berasal dari firebase (punya id) tambahkan tombol HAPUS
+    if(m.id){
+      const btnHapus = document.createElement('button');
+      btnHapus.className = 'btn btn-danger mt-2 w-100';
+      btnHapus.type = 'button';
+      btnHapus.textContent = 'HAPUS';
+      btnHapus.addEventListener('click', () => {
+        if(confirm('Hapus menu ini?')) db.ref('menus/' + m.id).remove();
+      });
+      wrap.appendChild(btnHapus);
+    }
+
+    menuContainer.appendChild(wrap);
+  });
+}
+
+/* =========================
+   Menambah menu ke Firebase
+   ========================= */
+function saveMenu(){
+  const nama = (document.getElementById('newMenuName').value || '').trim();
+  const harga = Number(document.getElementById('newMenuPrice').value || 0);
+  const gambar = document.getElementById('newMenuImage').value || 'https://via.placeholder.com/400x300?text=No+Image';
+
+  if(!nama || !harga){ alert('Isi nama dan harga'); return; }
+
+  db.ref('menus').push({ nama, harga, gambar })
+    .then(() => {
+      // kosongkan input
+      document.getElementById('newMenuName').value = '';
+      document.getElementById('newMenuPrice').value = '';
+      document.getElementById('newMenuImage').value = '';
+      alert('Menu disimpan (GLOBAL)');
+      goMenu();
+    })
+    .catch(err => {
+      console.error(err);
+      alert('Gagal menyimpan menu');
     });
 }
 
-
-function hapusMenu(id){
-  if(!confirm("Hapus menu ini?")) return;
-  db.ref("menus/"+id).remove();
-}
-
-
-function saveMenu(){
-  db.ref("menus").push({
-    nama: newMenuName.value,
-    harga: Number(newMenuPrice.value),
-    gambar: newMenuImage.value || 'https://via.placeholder.com/400'
-  });
-
-  // ✅ kosongkan input SETELAH simpan
-  newMenuName.value = '';
-  newMenuPrice.value = '';
-  newMenuImage.value = '';
-
-  alert("Menu disimpan (GLOBAL)");
-  goMenu();
-}
-
-function hapus(i){
-  const e=getExtra();
-  e.splice(i,1);
-  localStorage.setItem('extraMenus',JSON.stringify(e));
-  renderMenu();
-}
-
-function order(n,h){
-  window.open(`https://wa.me/62895343287264?text=Pesan ${n} Rp${h}`);
-}
-
-if(localStorage.getItem('login')) goBeranda(); else showLogin();
-
-let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-
-function addToCart(nama, harga){
-  cart.push({nama, harga});
-  localStorage.setItem('cart', JSON.stringify(cart));
-  alert('Masuk keranjang');
-}
-
-function goCart(){
-  hideAll();
-  cartSection.classList.remove('hidden');
-  renderCart();
+/* =========================
+   Keranjang (cart)
+   ========================= */
+function order(n, h){
+  cart.push({ nama: n, harga: h });
+  alert(n + ' ditambahkan ke keranjang');
 }
 
 function renderCart(){
-  const cartList = document.getElementById('cartList');
-  const cartTotal = document.getElementById('cartTotal');
-  cartList.innerHTML = '';
-  let total = 0;
+  cartContainer.innerHTML = '';
+  if(cart.length === 0){
+    cartContainer.innerHTML = '<p>Keranjang kosong</p>';
+    return;
+  }
 
-  cart.forEach((item, i)=>{
-    total += item.harga;
-    cartList.innerHTML += `
-      <div class="menu-item mb-2">
-        <b>${item.nama}</b>
-        <p>Rp${item.harga.toLocaleString('id-ID')}</p>
-        <button class="btn btn-danger btn-sm" onclick="removeCart(${i})">Hapus</button>
-      </div>
-    `;
+  let total = 0;
+  cart.forEach((it, idx) => {
+    total += it.harga;
+    const wrap = document.createElement('div');
+    wrap.className = 'menu-item';
+
+    const h5 = document.createElement('h5');
+    h5.textContent = it.nama;
+
+    const p = document.createElement('p');
+    p.textContent = `Rp${Number(it.harga).toLocaleString('id-ID')}`;
+
+    const del = document.createElement('button');
+    del.className = 'btn btn-danger w-100';
+    del.type = 'button';
+    del.textContent = 'Hapus';
+    del.addEventListener('click', () => {
+      removeCart(idx);
+    });
+
+    wrap.appendChild(h5);
+    wrap.appendChild(p);
+    wrap.appendChild(del);
+
+    cartContainer.appendChild(wrap);
   });
 
-  cartTotal.innerText = 'Rp' + total.toLocaleString('id-ID');
+  const totalEl = document.createElement('h4');
+  totalEl.className = 'mt-3';
+  totalEl.textContent = `Total: Rp${Number(total).toLocaleString('id-ID')}`;
+  cartContainer.appendChild(totalEl);
 }
 
 function removeCart(i){
   cart.splice(i,1);
-  localStorage.setItem('cart', JSON.stringify(cart));
   renderCart();
 }
 
 function checkout(){
-  if(cart.length === 0){
-    alert('Keranjang kosong');
-    return;
-  }
+  if(cart.length === 0){ alert('Keranjang kosong'); return; }
 
-  let pesan = 'Pesanan saya:%0A';
+  let pesan = 'Pesanan:%0A';
   let total = 0;
-
-  cart.forEach(item=>{
-    pesan += `- ${item.nama} Rp${item.harga}%0A`;
-    total += item.harga;
+  cart.forEach(it => {
+    pesan += `- ${it.nama} Rp${it.harga}%0A`;
+    total += it.harga;
   });
-
   pesan += `%0ATotal: Rp${total}`;
-  cart = [];
-  localStorage.removeItem('cart');
 
-  window.open(`https://wa.me/62895343287264?text=${pesan}`);
+  // buka WA
+  window.open(`https://wa.me/62895343287264?text=${encodeURIComponent(decodeURIComponent(pesan))}`);
 }
 
+/* =========================
+   Auto-login check saat load
+   ========================= */
+if(localStorage.getItem('login')) goBeranda(); else showLogin();
 
+/* =========================
+   Notes / debugging helpers (opsional)
+   ========================= */
+// window._debug = { allMenus, cart, renderMenu, renderCart };
 </script>
-
-
 
 </body>
 </html>
